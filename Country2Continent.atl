@@ -1,0 +1,28 @@
+-- @path Countries=/sa-mtm/Countries.ecore
+-- @path Continents=/sa-mtm/Continents.ecore
+
+module Country2Continent;
+create OUT: Continents from IN: Countries
+
+helper context Continent!Continent def: accumulatePopulation: FLoat =
+	self.country->collect(c|c.population) ->
+		iterate(population; acc: Integer = 0 |
+		acc + pages)
+
+helper context Continent!Continent def: calculateGDP: Float =
+	totalGDP = self.country->collect(c|c.gdp) ->
+		iterate(gdp; acc: Integer = 0 |
+		acc + gdp)
+	(totalGDP / self.country.count())
+	
+helper context Continent!Continent def: calculateCOL: FLoat =
+	totalCOL = self.country->collect(c|c.costofliving) ->
+		iterate(col; acc: Integer = 0 |
+		acc + col)
+	(totalCOL / self.country.count())
+	
+helper context Continent!Continent def: calculatePL: FLoat =
+	totalPL = self.country->collect(c|c.povertyline) ->
+		iterate(pl; acc: Integer = 0 |
+		acc + pl)
+	(totalPL / self.country.count())
