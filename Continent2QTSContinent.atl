@@ -2,40 +2,37 @@
 -- @path QTSContinents=/sa-mtm/QTSContinents.ecore
 
 module Continent2QTSContinent;
-create OUT: QTSContinents from IN: Continents
+create OUT: QTSContinents from IN: Continents;
 
-helper context Continent!Continent def: accumulatePopulation: FLoat =
+helper context Continents!Continent def: accumulatePopulation: Real =
 	self.country->collect(c|c.population) ->
-		iterate(population; acc: Integer = 0 |
-		acc + pages)
+		iterate(population; acc: Real = 0 |
+		acc + population);
 
-helper context Continent!Continent def: calculateGDP: Float =
-	totalGDP = self.country->collect(c|c.gdp) ->
-		iterate(gdp; acc: Integer = 0 |
-		acc + gdp)
-	(totalGDP / self.country.count())
+helper context Continents!Continent def: calculateGDP(): Real =
+	self.country->collect(c|c.gdp) ->
+		iterate(gdp; acc: Real = 0 |
+		acc + gdp).div(self.country.count());
 	
-helper context Continent!Continent def: calculateCOL: FLoat =
-	totalCOL = self.country->collect(c|c.costofliving) ->
-		iterate(col; acc: Integer = 0 |
-		acc + col)
-	(totalCOL / self.country.count())
+helper context Continents!Continent def: calculateCOL(): Real =
+	self.country->collect(c|c.costofliving) ->
+		iterate(col; acc: Real = 0 |
+		acc + col).div(self.country.count());
 	
-helper context Continent!Continent def: calculatePL: FLoat =
-	totalPL = self.country->collect(c|c.povertyline) ->
-		iterate(pl; acc: Integer = 0 |
-		acc + pl)
-	(totalPL / self.country.count())
+helper context Continent!Continent def: calculatePL(): Real =
+	self.country->collect(c|c.povertyline) ->
+		iterate(pl; acc: Real = 0 |
+		acc + pl).div(self.country.count());
 	
 rule Continent2QTSContinent {
 	from
-		c : Continent!Continent()
+		c : Continents!Continent
 	to
 		out: QTSContinent!QTSContinent (
-			name <- c.name
-			population <- c.accumulatePopulation()
-			gdp <- c.calculateGDP()
-			costOfLiving <- c.calculateCOL()
+			name <- c.name,
+			population <- c.accumulatePopulation,
+			gdp <- c.calculateGDP(),
+			costOfLiving <- c.calculateCOL(),
 			povertyLine <- c.calculatePOL()
 		)
 }
