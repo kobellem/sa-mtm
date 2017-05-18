@@ -1,8 +1,8 @@
--- @path Countries=/sa-mtm/Countries.ecore
 -- @path Continents=/sa-mtm/Continents.ecore
+-- @path QTSContinents=/sa-mtm/QTSContinents.ecore
 
 module Continent2QTSContinent;
-create OUT: QTSContinents from IN: Countries
+create OUT: QTSContinents from IN: Continents
 
 helper context Continent!Continent def: accumulatePopulation: FLoat =
 	self.country->collect(c|c.population) ->
