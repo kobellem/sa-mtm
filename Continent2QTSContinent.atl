@@ -27,3 +27,15 @@ helper context Continent!Continent def: calculatePL: FLoat =
 		acc + pl)
 	(totalPL / self.country.count())
 	
+rule Continent2QTSContinent {
+	from
+		c : Continent!Continent()
+	to
+		out: QTSContinent!QTSContinent (
+			name <- c.name
+			population <- c.accumulatePopulation()
+			gdp <- c.calculateGDP()
+			costOfLiving <- c.calculateCOL()
+			povertyLine <- c.calculatePOL()
+		)
+}
