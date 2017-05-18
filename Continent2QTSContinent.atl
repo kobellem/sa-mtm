@@ -12,17 +12,17 @@ helper context Continents!Continent def: accumulatePopulation: Real =
 helper context Continents!Continent def: calculateGDP(): Real =
 	self.Country->collect(c|c.gdp) ->
 		iterate(gdp; acc: Real = 0 |
-		acc + gdp) / self.Country.count();
+		acc + gdp) / self.Country.size();
 	
 helper context Continents!Continent def: calculateCOL(): Real =
 	self.Country->collect(c|c.costOfLiving) ->
 		iterate(col; acc: Real = 0 |
-		acc + col) / self.Country.count();
+		acc + col) / self.Country.size();
 	
 helper context Continents!Continent def: calculatePOL(): Real =
 	self.Country->collect(c|c.povertyLine) ->
 		iterate(pl; acc: Real = 0 |
-		acc + pl) / self.Country.count();
+		acc + pl) / self.Country.size();
 	
 rule Continent2QTSContinent {
 	from
