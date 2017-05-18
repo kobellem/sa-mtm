@@ -5,30 +5,30 @@ module Continent2QTSContinent;
 create OUT: QTSContinents from IN: Continents;
 
 helper context Continents!Continent def: accumulatePopulation: Real =
-	self.country->collect(c|c.population) ->
+	self.Country->collect(c|c.population) ->
 		iterate(population; acc: Real = 0 |
 		acc + population);
 
 helper context Continents!Continent def: calculateGDP(): Real =
-	self.country->collect(c|c.gdp) ->
+	self.Country->collect(c|c.gdp) ->
 		iterate(gdp; acc: Real = 0 |
-		acc + gdp).div(self.country.count());
+		acc + gdp) / self.Country.count();
 	
 helper context Continents!Continent def: calculateCOL(): Real =
-	self.country->collect(c|c.costofliving) ->
+	self.Country->collect(c|c.costOfLiving) ->
 		iterate(col; acc: Real = 0 |
-		acc + col).div(self.country.count());
+		acc + col) / self.Country.count();
 	
-helper context Continent!Continent def: calculatePL(): Real =
-	self.country->collect(c|c.povertyline) ->
+helper context Continents!Continent def: calculatePOL(): Real =
+	self.Country->collect(c|c.povertyLine) ->
 		iterate(pl; acc: Real = 0 |
-		acc + pl).div(self.country.count());
+		acc + pl) / self.Country.count();
 	
 rule Continent2QTSContinent {
 	from
 		c : Continents!Continent
 	to
-		out: QTSContinent!QTSContinent (
+		out: QTSContinents!QTSContinents (
 			name <- c.name,
 			population <- c.accumulatePopulation,
 			gdp <- c.calculateGDP(),
