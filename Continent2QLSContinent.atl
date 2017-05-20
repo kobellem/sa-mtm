@@ -1,0 +1,75 @@
+-- @path Continents=/sa-mtm/Continents.ecore
+-- @path QLSContinents=/sq-mtm/QLSContinents.ecore
+
+module Continent2QLSContinent;
+create OUT:QLSContinents from IN: Continents;
+
+helper context Continents!Continent def: ratePopulation: String =
+	let value : Real = self.Country->collect(c|c.population) ->
+		iterate(population; acc: Real = 0 |
+		acc + population) in
+		if value < 80 then
+			'Low'
+		else
+			if value < 500 then
+				'Medium'
+			else
+				'High'
+			endif
+		endif;
+
+helper context Continents!Continent def: rateGdp: String =
+	let value : Real = self.Country->collect(c|c.gdp) ->
+		iterate(gdp; acc: Real = 0 |
+		acc + gdp) / self.Country.size() in
+		if value < 100000 then
+			'Low'
+		else
+			if value < 1000000 then
+				'Medium'
+			else
+				'High'
+			endif
+		endif;
+
+helper context Continents!Continent def: rateCostOfLiving: String =
+	let value : Real = self.Country->collect(c|c.costOfLiving) ->
+		iterate(col; acc: Real = 0 |
+		acc + col) / self.Country.size() in
+		if value < 500 then
+			'Low'
+		else
+			if value < 2000 then
+				'Medium'
+			else
+				'High'
+			endif
+		endif;
+
+helper context Continents!Continent def: ratePovertyLine: String =
+	let value : Real = self.Country->collect(c|c.povertyLine) ->
+		iterate(pl; acc: Real = 0 |
+		acc + pl) / self.Country.size() in
+		if value < 16 then
+			'Low'
+		else
+			if value < 28 then
+				'Medium'
+			else
+				'High'
+			endif
+		endif;
+
+rule Continent2QLSContinent {
+	from
+		c : Continents!Continent
+	to
+		out : QLSContinents!QLSContinents (
+			name <- c.name,
+			population <- c.ratePopulation,
+			gdp <- c.rateGdp,
+			costOfLiving <- c.rateCostOfLiving,
+			povertyLine <- c.ratePovertyLine
+		)
+}
+		
